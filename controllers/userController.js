@@ -12,7 +12,7 @@ exports.createUser = (req, res) => {
 };
 
 exports.getUser = (req, res) => {
-  return req.status(500).json({
+  return res.status(500).json({
     status: 'error',
     message: 'This route is not yet defined!',
   });
