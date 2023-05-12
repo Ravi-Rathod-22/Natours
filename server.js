@@ -31,11 +31,24 @@ const tourSchema = new mongoose.Schema({
   },
   price: {
     type: Number,
-    default: [true, 'A tor must have a price'],
+    required: [true, 'A tor must have a price'],
   },
 });
 
 const Tour = mongoose.model('Tour', tourSchema);
+
+const testTour = new Tour({
+  name: 'The Forest',
+});
+
+testTour
+  .save()
+  .then((doc) => {
+    console.log(doc);
+  })
+  .catch((err) => {
+    console.log('ERROR : ', err);
+  });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
