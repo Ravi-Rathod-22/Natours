@@ -10,7 +10,7 @@ const router = express.Router();
 router
   .route('/')
   .get(tourController.getAllTours)
-  .post(tourController.checkBody, tourController.createTour);
+  .post(tourController.createTour);
 
 // app.get('/api/v1/tours/:id', getTour);
 // app.patch(`/api/v1/tour/:id`, updateTour);
