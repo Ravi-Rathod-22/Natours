@@ -12,7 +12,27 @@ exports.checkBody = (req, res, next) => {
 
 exports.getAllTours = async (req, res) => {
   try {
-    const tours = await Tour.find();
+    // 1) Filtering
+    const queryObj = { ...req.query };
+    const excludeFields = ['page', 'sort', 'limit', 'fields'];
+    excludeFields.forEach((el) => delete queryObj[el]);
+
+    // 2) Advance Filtering
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+
+    const tours = await Tour.find(JSON.parse(queryStr));
+
+    // { duration: { $gte: '5' }, difficulty: 'easy' }
+    // { duration: { gte: '5' }, difficulty: 'easy' }
+    // gte, gt, lte, lt
+
+    // const tours = await Tour.find()
+    //   .where('duration')
+    //   .equals(5)
+    //   .where('difficulty')
+    //   .equals('easy');
+
     return res.status(200).json({
       status: 'Success',
       results: tours.length,
