@@ -12,6 +12,8 @@ router
 
 router.route('/tour-status').get(tourController.getTourStatus);
 
+router.route('/monthly-plan/:year').get(tourController.getMonthlyPlan);
+
 // app.get('/api/v1/tours', getAllTours);
 // app.post(`/api/v1/tours`, createTour);
 router
