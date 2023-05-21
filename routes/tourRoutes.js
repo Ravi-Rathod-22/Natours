@@ -10,6 +10,8 @@ router
   .route('/top-5-cheap')
   .get(tourController.aliasTopTour, tourController.getAllTours);
 
+router.route('/tour-status').get(tourController.getTourStatus);
+
 // app.get('/api/v1/tours', getAllTours);
 // app.post(`/api/v1/tours`, createTour);
 router
