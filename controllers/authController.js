@@ -31,10 +31,12 @@ exports.signup = catchAsync(async (req, res, next) => {
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
+  // 1) Check if email and password exist
   if (!email || !password) {
     return next(new AppError('Please provide email and password!', 400));
   }
 
+  // 2) Check if user exits && password is correct
   const user = await User.findOne({ email }).select('+password');
   const correct = await user.correctPassword(password, user.password);
 
@@ -42,10 +44,33 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError('Incorrect Email or Password', 401));
   }
 
+  // 3) If everything ok, send token to client
   const token = signedToken(user._id);
 
   res.status(200).json({
     status: 'success',
     token,
   });
+});
+
+exports.protect = catchAsync(async (req, res, next) => {
+  // 1) Getting token and check if it's there
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+
+  if (!token) {
+    return next(
+      new AppError('You are not logged in! Please log in to get access', 401)
+    );
+  }
+
+  // 2) Verification token
+  jwt.verify(token, process.env.JWT_SECRET);
+
+  next();
 });
