@@ -3,6 +3,8 @@ const morgan = require('morgan');
 
 const app = express();
 
+const cors = require('cors');
+
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require(`./routes/tourRoutes`);
@@ -14,6 +16,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use(express.json());
+
+app.use(cors());
 
 app.use(express.static(`${__dirname}/public`));
 
