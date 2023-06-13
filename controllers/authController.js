@@ -184,7 +184,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
-exports.updatePassword = async (req, res, next) => {
+exports.updatePassword = catchAsync(async (req, res, next) => {
   // 1) Get user from collection
   const user = await User.findById(req.user.id).select('+password');
 
@@ -201,4 +201,4 @@ exports.updatePassword = async (req, res, next) => {
 
   // 4) Log user in, send JWT
   createSendToken(user, 200, res);
-};
+});
