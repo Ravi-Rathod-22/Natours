@@ -15,6 +15,19 @@ const signedToken = (id) => {
 const createSendToken = (user, statusCode, res) => {
   const token = signedToken(user._id);
 
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 60 * 60 * 1000
+    ),
+    httpOnly: true,
+  };
+
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+
+  res.cookie('jwt', token, cookieOptions);
+
+  user.password = undefined;
+
   res.status(statusCode).json({
     status: 'Success',
     token,
@@ -184,7 +197,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
-exports.updatePassword = async (req, res, next) => {
+exports.updatePassword = catchAsync(async (req, res, next) => {
   // 1) Get user from collection
   const user = await User.findById(req.user.id).select('+password');
 
@@ -201,4 +214,4 @@ exports.updatePassword = async (req, res, next) => {
 
   // 4) Log user in, send JWT
   createSendToken(user, 200, res);
-};
+});
