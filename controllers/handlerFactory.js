@@ -13,13 +13,31 @@ exports.deleteOne = (Model) =>
     });
   });
 
-// exports.deleteTour = catchAsync(async (req, res, next) => {
-//   const tour = await Tour.findByIdAndDelete(req.params.id);
-//   if (!tour) {
-//     next(new AppError('No tour found with that ID', 404));
-//   }
-//   return res.status(204).json({
-//     status: 'Success',
-//     data: null,
-//   });
-// });
+exports.updateOne = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!doc) {
+      next(new AppError('No tour found with that ID', 404));
+    }
+    return res.status(200).json({
+      status: 'Success',
+      data: {
+        doc,
+      },
+    });
+  });
+
+exports.createOne = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const doc = await Model.create(req.body);
+    return res.status(201).json({
+      status: 'success',
+      data: {
+        data: doc,
+      },
+    });
+  });
