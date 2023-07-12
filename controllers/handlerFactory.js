@@ -41,3 +41,21 @@ exports.createOne = (Model) =>
       },
     });
   });
+
+exports.getOne = (Model, popOptions) =>
+  catchAsync(async (req, res, next) => {
+    let query = Model.findById(req.params.id);
+    query = query.populate(popOptions);
+    const doc = await query;
+
+    if (!doc) {
+      next(new AppError('No document found with that ID', 404));
+    }
+
+    return res.status(200).json({
+      status: 'Success',
+      data: {
+        data: doc,
+      },
+    });
+  });
