@@ -9,23 +9,12 @@ exports.setTourUserIds = (req, res, next) => {
   next();
 };
 
-exports.getAllReviews = catchAsync(async (req, res, next) => {
-  let filter = {};
-  if (req.params.tourID) filter = { tour: req.params.tourID };
+exports.getAllReviews = factory.getAll(Review);
 
-  const reviews = await Review.find(filter)
-    .populate({ path: 'tour', select: 'name' })
-    .populate({ path: 'user', select: 'name photo' });
-
-  res.status(200).json({
-    status: 'Success',
-    results: reviews.length,
-    data: {
-      reviews,
-    },
-  });
-});
+exports.getReview = factory.getOne(Review);
 
 exports.createReview = factory.createOne(Review);
+
+exports.updateReview = factory.updateOne(Review);
 
 exports.deleteReview = factory.deleteOne(Review);
