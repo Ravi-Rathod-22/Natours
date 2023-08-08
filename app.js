@@ -1,12 +1,11 @@
 const express = require('express');
+const path = require('path');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
-
-const app = express();
 
 const cors = require('cors');
 
@@ -16,8 +15,17 @@ const tourRouter = require(`./routes/tourRoutes`);
 const userRouter = require(`./routes/userRoutes`);
 const reviewRouter = require(`./routes/reviewRoutes`);
 
+const app = express();
+
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
 // MIDDLEWARE
 
+// Serving static files
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Set security HTTP headers
 app.use(helmet());
 
 if (process.env.NODE_ENV === 'development') {
@@ -48,7 +56,9 @@ app.use(
   })
 );
 
-app.use(express.static(`${__dirname}/public`));
+app.get('/', (req, res) => {
+  res.status(200).render('base');
+});
 
 app.use((req, res, next) => {
   console.log(`Hello From Middleware`);
