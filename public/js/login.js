@@ -1,15 +1,25 @@
 /* eslint-disable */
 
 const login = async (email, password) => {
-  const res = await axios({
-    method: 'POST',
-    url: 'http://127.0.0.1:3000/api/v1/users/login',
-    data: {
-      email,
-      password,
-    },
-  });
-  console.log(res);
+  try {
+    const res = await axios({
+      method: 'POST',
+      url: 'http://127.0.0.1:3000/api/v1/users/login',
+      data: {
+        email,
+        password,
+      },
+    });
+
+    if (res.data.status === 'success') {
+      alert('Logged in successfully!');
+      window.setTimeout(() => {
+        location.assign('/');
+      }, 1500);
+    }
+  } catch (error) {
+    alert(error.response.data.message);
+  }
 };
 
 document.querySelector('.form').addEventListener('submit', (e) => {
