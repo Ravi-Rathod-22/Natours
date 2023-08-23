@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
 
 const cors = require('cors');
 
@@ -41,7 +42,9 @@ const limiter = rateLimit({
 
 app.use('/api', limiter);
 
+// Body parser, reading data from body into req.body
 app.use(express.json());
+app.use(cookieParser());
 
 app.use(cors());
 
@@ -59,6 +62,8 @@ app.use(
 
 app.use((req, res, next) => {
   console.log(`Hello From Middleware`);
+  req.requestTime = new Date().toISOString();
+  console.log(req.cookieParser);
   next();
 });
 
