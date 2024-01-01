@@ -28,7 +28,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Set security HTTP headers
-app.use(helmet());
+app.use(
+  // helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false })
+  helmet()
+);
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan(`dev`));
@@ -66,6 +69,10 @@ app.use((req, res, next) => {
   console.log(req.cookieParser);
   next();
 });
+// const email = document.getElementById('email');
+// console.log(email);
+// const password = document.getElementById('password')?.value;
+// console.log(password);
 
 app.use(`/`, viewRouter);
 app.use(`/api/v1/tours`, tourRouter);

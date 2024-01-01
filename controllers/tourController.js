@@ -77,7 +77,7 @@ exports.getMonthlyPlan = catchAsync(async (req, res) => {
       $addFields: { month: '$_id' },
     },
     {
-      $project: {
+      $pm : {
         _id: 0,
       },
     },

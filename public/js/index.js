@@ -9,9 +9,9 @@ const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form');
 
 // VALUES
-const email = document.getElementById('email').value;
+const email = document.getElementById('email');
 console.log(email);
-const password = document.getElementById('password').value;
+const password = document.getElementById('password')?.value;
 console.log(password);
 
 // DELEGATION
